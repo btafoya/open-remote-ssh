@@ -157,7 +157,8 @@ export class RemoteSSHResolver implements vscode.RemoteAuthorityResolver, vscode
 
     constructor(
         readonly context: vscode.ExtensionContext,
-        readonly logger: Log
+        readonly logger: Log,
+        private readonly onDidResolveHost?: (hostname: string) => void
     ) {
     }
 
@@ -170,6 +171,7 @@ export class RemoteSSHResolver implements vscode.RemoteAuthorityResolver, vscode
         this.logger.info(`Resolving ssh remote authority '${authority}' (attempt #${context.resolveAttempt})`);
 
         const sshDest = SSHDestination.parseEncoded(dest);
+        this.onDidResolveHost?.(sshDest.hostname);
 
         // It looks like default values are not loaded yet when resolving a remote,
         // so let's hardcode the default values here
