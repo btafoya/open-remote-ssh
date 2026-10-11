@@ -112,6 +112,37 @@
 					"default": "",
 					"scope": "application"
 				},
+				"remote.SSH.hostsView.recentFolders.count": {
+					"type": "number",
+					"description": "The number of recently opened folders shown in the Recent group of the SSH Targets view.",
+					"default": 5,
+					"minimum": 1,
+					"scope": "application"
+				},
+				"remote.SSH.hostsView.recentFolders.enabled": {
+					"type": "boolean",
+					"description": "Show the Recent group with recently opened folders at the top of the SSH Targets view.",
+					"default": true,
+					"scope": "application"
+				},
+				"remote.SSH.hostsView.sortOrder": {
+					"type": "string",
+					"description": "How hosts are sorted in the SSH Targets view.",
+					"default": "alphabetical",
+					"scope": "application",
+					"enum": [
+						"alphabetical",
+						"alphabeticalDescending",
+						"configOrder",
+						"lastUsed"
+					],
+					"enumDescriptions": [
+						"Sort hosts by name, A to Z. (default)",
+						"Sort hosts by name, Z to A.",
+						"Keep hosts in the order they appear in the SSH config file.",
+						"Sort hosts by when they were last connected to, most recent first."
+					]
+				},
 				"remote.SSH.connectTimeout": {
 					"type": "number",
 					"description": "Specifies the timeout in seconds used for the SSH command that connects to the remote.",
@@ -232,6 +263,11 @@
 				"command": "openremotessh.showLog",
 				"title": "Show Log",
 				"category": "Remote-SSH"
+			},
+			{
+				"command": "openremotessh.explorer.sortBy",
+				"title": "Sort Hosts...",
+				"icon": "$(list-filter)"
 			},
 			{
 				"command": "openremotessh.explorer.emptyWindowInNewWindow",
@@ -369,6 +405,10 @@
 				{
 					"command": "openremotessh.explorer.deleteFolderHistoryItem",
 					"when": "false"
+				},
+				{
+					"command": "openremotessh.explorer.sortBy",
+					"when": "false"
 				}
 			],
 			"view/title": [
@@ -384,6 +424,11 @@
 				},
 				{
 					"command": "openremotessh.explorer.refresh",
+					"when": "view == sshHosts",
+					"group": "navigation"
+				},
+				{
+					"command": "openremotessh.explorer.sortBy",
 					"when": "view == sshHosts",
 					"group": "navigation"
 				}

@@ -9,11 +9,12 @@ export async function activate(context: vscode.ExtensionContext) {
     const logger = new Log('Remote - SSH');
     context.subscriptions.push(logger);
 
-    const remoteSSHResolver = new RemoteSSHResolver(context, logger);
+    const locationHistory = new RemoteLocationHistory(context);
+
+    const remoteSSHResolver = new RemoteSSHResolver(context, logger, hostname => locationHistory.markHostUsed(hostname));
     context.subscriptions.push(vscode.workspace.registerRemoteAuthorityResolver(REMOTE_SSH_AUTHORITY, remoteSSHResolver));
     context.subscriptions.push(remoteSSHResolver);
 
-    const locationHistory = new RemoteLocationHistory(context);
     const locationData = getRemoteWorkspaceLocationData();
     if (locationData) {
         await locationHistory.addLocation(locationData[0], locationData[1]);
